@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Prova Supero - Tasklist</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="title" content="Prova Supero Tasklist" />
+        <meta name="description" content="Prova realizada para vaga - Analista Supero" />
+        <meta name="keywords" content="keywords here" />
+        <meta name="language" content="pt" />
+        <meta name="subject" content="Site subject here" />
+        <meta name="robots" content="All" />
+        <meta name="copyright" content="Your company" />
+        <meta name="abstract" content="Site description here" />
+        <meta name="MSSmartTagsPreventParsing" content="true" />
+    </h:head>
+
+    <h:body>
+        <center>
+            <h:form id="formularioCadastro">
+                <p:messages id="messages" showDetail="true" closable="true" autoUpdate="true">
+                </p:messages>
+                <p:panel header="Tarefas">
+                    <h:panelGrid columns="2" cellpadding="3">
+                        <p:outputLabel for="titulo" value="Título: "/>
+                        <p:inputText id="titulo" value="#{inicio.taskBean.titulo}" />
+                        <p:outputLabel for="descricao" value="Descrição: "/>
+                        <p:inputTextarea id="descricao" value="#{inicio.taskBean.descricao}" />
+                        <p:outputLabel for="status" value="Estado: "/>
+                        <p:selectOneMenu id="status" value="#{inicio.taskBean.status}" style="width:125px">
+                            <f:selectItem itemLabel="Selecione um valor" itemValue="-1" />
+                            <f:selectItem itemLabel="Pendente" itemValue="0" />
+                            <f:selectItem itemLabel="Concluido" itemValue="1" />
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" cellpadding="3">
+                        <p:commandButton value ="Salvar" 
+                                         update="formularioCadastro" 
+                                         action="#{inicio.salvar()}" />
+                        <p:commandButton value="Cancelar"
+                                         update="formularioCadastro" 
+                                         action="#{inicio.limpar()}"/>
+                    </h:panelGrid>
+                </p:panel>
+
+
+                <p:spacer width="30"/>
+
+                <p:panel header="Lista Atividades" id="listaAtividades">
+                    <p:dataTable value="#{inicio.listaAtividades}" 
+                                 id="tabelaAtividades"
+                                 rowIndexVar="var"
+                                 paginator="true"
+                                 paginatorAlwaysVisible="true"
+                                 paginatorPosition="bottom"
+                                 var="ativ"
+                                 emptyMessage="Não há atividades registradas.">
+                        <p:column sortBy="#{ativ.titulo}">
+                            <f:facet name="header">
+                                <h:outputText value="Titulo"/>
+                            </f:facet>
+                            <h:outputText value="#{ativ.titulo}"/>
+                        </p:column>
+                        <p:column sortBy="#{ativ.descricao}">
+                            <f:facet name="header">
+                                <h:outputText value="Descrição"/>
+                            </f:facet>
+                            <h:outputText value="#{ativ.descricao}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Estado"/>
+                            </f:facet>
+                            <h:outputText value="#{ativ.getDescStatus()}"/>
+                        </p:column>
+                        <p:column headerText="Opções" style="width:200px; text-align:center;">
+                            <p:commandButton icon="ui-icon ui-icon-pencil"
+                                             title="Editar"
+                                             update=":formularioCadastro"
+                                             actionListener="#{inicio.editar(ativ)}"/>
+                            <p:commandButton icon="ui-icon ui-icon-trash"
+                                             title="Remover"
+                                             update=":formularioCadastro"
+                                             actionListener="#{inicio.deletar(ativ)}"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>    
+        </center>
+    </h:body>
+</html>
+
